@@ -34,9 +34,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         guard let searchTerm = subredditSearchBar.text else { return }
         SubredditController.getSubreddit(searchTerm) { (subreddit) -> Void in
             guard let subredditResult = subreddit else { return }
-            self.subsArray = subredditResult.subsArray
-            self.myTableView.reloadData()
-            self.subredditSearchBar.text = ""
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.subsArray = subredditResult.subsArray
+                self.myTableView.reloadData()
+                self.subredditSearchBar.text = ""
+            })
+            
         }
         
     }
