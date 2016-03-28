@@ -11,15 +11,19 @@ import Foundation
 struct Subreddit {
     
     var subsArray: [String]
+    var urlsArray: [String]
     
     init?(jsonDictionary: [String: AnyObject]) {
         guard let data = jsonDictionary["data"] as? [String:AnyObject] else { return nil }
         guard let childrenArray = data["children"] as? [[String:AnyObject]] else { return nil }
         self.subsArray = []
+        self.urlsArray = []
         for dataDictionary in childrenArray {
             guard let almostThereDictionary = dataDictionary["data"] as? [String:AnyObject] else { return nil }
             guard let title = almostThereDictionary["title"] as? String else { return nil }
             self.subsArray.append(title)
+            guard let urlString = almostThereDictionary["title"] as? String else { return nil }
+            self.urlsArray.append(urlString)
         }
     }
 }

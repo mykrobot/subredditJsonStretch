@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class SearchViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
@@ -14,6 +15,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var subredditSearchBar: UISearchBar!
     
     var subsArray: [String] = []
+    var urlArray: [String] = []
     
     
     override func viewDidLoad() {
@@ -36,6 +38,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
             guard let subredditResult = subreddit else { return }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.subsArray = subredditResult.subsArray
+                self.urlArray = subredditResult.urlsArray
                 self.myTableView.reloadData()
                 self.subredditSearchBar.text = ""
             })
@@ -56,6 +59,12 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         let title = subsArray[indexPath.row]
         cell.textLabel?.text = title
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let url = NSURL(string: urlArray[indexPath.row]) 
+        let viewController = SFSafariViewController(URL: url!)
+        presentViewController(viewController, animated: true, completion: nil)
     }
     
     
